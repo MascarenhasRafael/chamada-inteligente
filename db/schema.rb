@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_22_040044) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_22_051840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,4 +23,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_22_040044) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "class_attendances", force: :cascade do |t|
+    t.string "professor_id", null: false
+    t.string "professor_latitude", null: false
+    t.string "professor_longitude", null: false
+    t.string "classroom_id", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "scheduled_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "presences", force: :cascade do |t|
+    t.string "student_id", null: false
+    t.string "latitude", null: false
+    t.string "longitude", null: false
+    t.bigint "class_attendance_id", null: false
+    t.datetime "approved_at"
+    t.datetime "declined_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["class_attendance_id"], name: "index_presences_on_class_attendance_id"
+  end
+
+  add_foreign_key "presences", "class_attendances"
 end
